@@ -420,9 +420,10 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(442, 499);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "frmSolveEquation";
-            this.Text = "frmSolveEquation";
+            this.Text = "Calculator";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.gbNumbers.ResumeLayout(false);
