@@ -2,7 +2,7 @@
 
 A fully functional Windows Forms calculator built with C#, featuring standard arithmetic operations and a built-in quadratic equation solver.
 
-![Calculator Preview](preview.png)
+![Calculator Preview](MainCalculator.png)
 
 ---
 
@@ -67,7 +67,7 @@ if (_equationForm == null || _equationForm.IsDisposed)
 
 | Calculator | Equation Solver |
 |---|---|
-| ![Calculator](preview.png) | ![Solver](preview2.png) |
+| ![Calculator](MainCalculator.png) | ![Solver](QuadraticEquationSolver.png) |
 
 ---
 
@@ -75,7 +75,7 @@ if (_equationForm == null || _equationForm.IsDisposed)
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/[your-username]/WinForms-Calculator.git
+https://github.com/AbdEssamed-Laidani/WinForms-Calculator.git
 ```
 2. Open `SimpleCalculator.sln` in **Visual Studio 2019+**
 3. Build and run (`F5`)
