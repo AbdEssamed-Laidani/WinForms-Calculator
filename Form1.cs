@@ -26,7 +26,7 @@ namespace SimpleCalculator
                 if (Screen.Text[0] == '0' && Screen.Text.Length == 1)
                 {
                     if (button != btnDecimalPoint &&
-                        button != btnDevid &&
+                        button != btnDivide &&
                         button != btnMODoperator &&
                         button != btnMultiply)
                         Screen.Text = button.Text.ToString();
@@ -37,9 +37,29 @@ namespace SimpleCalculator
                     Screen.Text += button.Text.ToString();
             }
         }
-        private decimal CalculateMultiplyAndDevidByOrder(string Item)
+        private void UpdateOperation(ref double result,ref List<string> list,ref int index,char operation)
         {
-            decimal result = default;
+            switch(operation)
+            {
+                case '*':
+                    result = Convert.ToDouble(list[index - 1]) * Convert.ToDouble(list[index + 1]);
+                    break;
+                case '/':
+                    if (list[index + 1] == "0")
+                        throw new DivideByZeroException();
+                    result = Convert.ToDouble(list[index - 1]) / Convert.ToDouble(list[index + 1]);
+                    break;
+                case '%':
+                    result = Convert.ToDouble(list[index - 1]) % Convert.ToDouble(list[index + 1]);
+                    break;
+            }
+            list[index + 1] = result.ToString();
+            list.RemoveRange(index - 1, 2);
+            index -= 2;
+        }
+        private double CalculateByOrder(string Item)
+        {
+            double result = default;
             string pattern = @"([\×\÷\%])";
             var ItemSplited = Regex.Split(Item.Replace("mod", "%"), pattern)
                             .Where(s => !string.IsNullOrWhiteSpace(s))
@@ -51,30 +71,18 @@ namespace SimpleCalculator
                 {
                     case "×":
                         if (i + 1 < ItemSplited.Count)
-                        {
-                            result = Convert.ToDecimal(ItemSplited[i - 1]) * Convert.ToDecimal(ItemSplited[i + 1]);
-                            ItemSplited[i + 1] = result.ToString();
-                            ItemSplited.RemoveRange(i - 1, 2);
-                            i-=2;
-                        }
+                            UpdateOperation(ref result, ref ItemSplited, ref i,'*');
+
                         break;
                     case "÷":
                         if (i + 1 < ItemSplited.Count)
-                        {
-                            result = Convert.ToDecimal(ItemSplited[i - 1]) / Convert.ToDecimal(ItemSplited[i + 1]);
-                            ItemSplited[i + 1] = result.ToString();
-                            ItemSplited.RemoveRange(i - 1, 2);
-                            i -= 2;
-                        }
+                            UpdateOperation(ref result, ref ItemSplited, ref i, '/');
+
                         break;
                     case "%":
                         if (i + 1 < ItemSplited.Count)
-                        {
-                            result = Convert.ToDecimal(ItemSplited[i - 1]) % Convert.ToDecimal(ItemSplited[i + 1]);
-                            ItemSplited[i + 1] = result.ToString();
-                            ItemSplited.RemoveRange(i - 1, 2);
-                            i -= 2;
-                        }
+                            UpdateOperation(ref result, ref ItemSplited, ref i, '%');
+
                         break;
                     default:
                         break;
@@ -84,23 +92,23 @@ namespace SimpleCalculator
 
             return result;
         }
-        protected decimal CalculateFinalResult()
+        public double CalculateFinalResult(in string ScreenText)
         {
             string Pattern = @"(?=[+\-])";
-            decimal result = 0;
-            var ScreenAfterSplit = Regex.Split(Screen.Text, Pattern)
+            double result = 0;
+            var ScreenAfterSplit = Regex.Split(ScreenText, Pattern)
                                         .Where(s => !string.IsNullOrWhiteSpace(s))
                                         .ToList();
             for (int i = 0; i < ScreenAfterSplit.Count; i++)
             {
                 if (ScreenAfterSplit[i].Contains("×") || ScreenAfterSplit[i].Contains("÷") || ScreenAfterSplit[i].Contains("mod"))
                 {
-                    ScreenAfterSplit[i] = CalculateMultiplyAndDevidByOrder(ScreenAfterSplit[i]).ToString();
+                    ScreenAfterSplit[i] = CalculateByOrder(ScreenAfterSplit[i]).ToString();
                 }
             }
             for (int i = 0; i < ScreenAfterSplit.Count; i++)
             {
-                result += Convert.ToDecimal(ScreenAfterSplit[i]);
+                result += Convert.ToDouble(ScreenAfterSplit[i]);
             }
 
             return result;
@@ -137,8 +145,8 @@ namespace SimpleCalculator
                     PerformOperation(btnMultiply);
                     btnDecimalPoint.Tag = "1";
                     break;
-                case "btnDevid":
-                    PerformOperation(btnDevid);
+                case "btnDivide":
+                    PerformOperation(btnDivide);
                     btnDecimalPoint.Tag = "1";
                     break;
                 case "btnMODoperator":
@@ -180,9 +188,10 @@ namespace SimpleCalculator
         }
         private void btnEqual_Click(object sender, EventArgs e)
         {
+            
             try
             {
-                Screen.Text = CalculateFinalResult().ToString();
+                Screen.Text = CalculateFinalResult(Screen.Text).ToString();
             }
             catch (Exception ex)
             {
@@ -194,10 +203,26 @@ namespace SimpleCalculator
             ChangeScreen(sender as Button);
         }
 
+        private frmSolveEquation _equationForm;
         private void btnSolveEquation_Click(object sender, EventArgs e)
         {
-            frmSolveEquation form = new frmSolveEquation();
-            form.ShowDialog();   
+            if (_equationForm == null || _equationForm.IsDisposed)
+            {
+                _equationForm = new frmSolveEquation(this);
+                _equationForm.Show();
+            }
+            else
+                _equationForm.Focus();
+        }
+
+        private void btnCopyScreen_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(Screen.Text);
+        }
+
+        private void btnPasteClipboard_Click(object sender, EventArgs e)
+        {
+            Screen.Text += Clipboard.GetText();
         }
     }
 }

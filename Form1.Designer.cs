@@ -30,13 +30,16 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnPasteClipboard = new System.Windows.Forms.Button();
+            this.btnCopyScreen = new System.Windows.Forms.Button();
+            this.btnSolveEquation = new System.Windows.Forms.Button();
             this.Screen = new System.Windows.Forms.RichTextBox();
             this.btnMODoperator = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnClearScreen = new System.Windows.Forms.Button();
             this.btnDecimalPoint = new System.Windows.Forms.Button();
             this.btnNumber0 = new System.Windows.Forms.Button();
-            this.btnDevid = new System.Windows.Forms.Button();
+            this.btnDivide = new System.Windows.Forms.Button();
             this.btnMultiply = new System.Windows.Forms.Button();
             this.btnSubtract = new System.Windows.Forms.Button();
             this.btnAddition = new System.Windows.Forms.Button();
@@ -50,13 +53,14 @@
             this.btnNumber3 = new System.Windows.Forms.Button();
             this.btnNumber2 = new System.Windows.Forms.Button();
             this.btnNumber1 = new System.Windows.Forms.Button();
-            this.btnSolveEquation = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox1.Controls.Add(this.btnPasteClipboard);
+            this.groupBox1.Controls.Add(this.btnCopyScreen);
             this.groupBox1.Controls.Add(this.btnSolveEquation);
             this.groupBox1.Controls.Add(this.Screen);
             this.groupBox1.Controls.Add(this.btnMODoperator);
@@ -64,7 +68,7 @@
             this.groupBox1.Controls.Add(this.btnClearScreen);
             this.groupBox1.Controls.Add(this.btnDecimalPoint);
             this.groupBox1.Controls.Add(this.btnNumber0);
-            this.groupBox1.Controls.Add(this.btnDevid);
+            this.groupBox1.Controls.Add(this.btnDivide);
             this.groupBox1.Controls.Add(this.btnMultiply);
             this.groupBox1.Controls.Add(this.btnSubtract);
             this.groupBox1.Controls.Add(this.btnAddition);
@@ -84,6 +88,44 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
+            // btnPasteClipboard
+            // 
+            this.btnPasteClipboard.BackColor = System.Drawing.Color.IndianRed;
+            this.btnPasteClipboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPasteClipboard.Location = new System.Drawing.Point(233, 190);
+            this.btnPasteClipboard.Name = "btnPasteClipboard";
+            this.btnPasteClipboard.Size = new System.Drawing.Size(90, 51);
+            this.btnPasteClipboard.TabIndex = 22;
+            this.btnPasteClipboard.Tag = "";
+            this.btnPasteClipboard.Text = "Paste";
+            this.btnPasteClipboard.UseVisualStyleBackColor = false;
+            this.btnPasteClipboard.Click += new System.EventHandler(this.btnPasteClipboard_Click);
+            // 
+            // btnCopyScreen
+            // 
+            this.btnCopyScreen.BackColor = System.Drawing.Color.IndianRed;
+            this.btnCopyScreen.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCopyScreen.Location = new System.Drawing.Point(166, 190);
+            this.btnCopyScreen.Name = "btnCopyScreen";
+            this.btnCopyScreen.Size = new System.Drawing.Size(61, 51);
+            this.btnCopyScreen.TabIndex = 21;
+            this.btnCopyScreen.Tag = "";
+            this.btnCopyScreen.Text = "Copy";
+            this.btnCopyScreen.UseVisualStyleBackColor = false;
+            this.btnCopyScreen.Click += new System.EventHandler(this.btnCopyScreen_Click);
+            // 
+            // btnSolveEquation
+            // 
+            this.btnSolveEquation.BackColor = System.Drawing.Color.IndianRed;
+            this.btnSolveEquation.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSolveEquation.Location = new System.Drawing.Point(16, 190);
+            this.btnSolveEquation.Name = "btnSolveEquation";
+            this.btnSolveEquation.Size = new System.Drawing.Size(136, 51);
+            this.btnSolveEquation.TabIndex = 20;
+            this.btnSolveEquation.Text = "SOLVE QUADRATIC EQUATION";
+            this.btnSolveEquation.UseVisualStyleBackColor = false;
+            this.btnSolveEquation.Click += new System.EventHandler(this.btnSolveEquation_Click);
+            // 
             // Screen
             // 
             this.Screen.BackColor = System.Drawing.Color.Thistle;
@@ -99,7 +141,7 @@
             // btnMODoperator
             // 
             this.btnMODoperator.BackColor = System.Drawing.Color.IndianRed;
-            this.btnMODoperator.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F);
+            this.btnMODoperator.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMODoperator.Location = new System.Drawing.Point(166, 247);
             this.btnMODoperator.Name = "btnMODoperator";
             this.btnMODoperator.Size = new System.Drawing.Size(61, 51);
@@ -159,18 +201,18 @@
             this.btnNumber0.UseVisualStyleBackColor = false;
             this.btnNumber0.Click += new System.EventHandler(this.Click_Button);
             // 
-            // btnDevid
+            // btnDivide
             // 
-            this.btnDevid.BackColor = System.Drawing.Color.Plum;
-            this.btnDevid.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDevid.Location = new System.Drawing.Point(233, 247);
-            this.btnDevid.Name = "btnDevid";
-            this.btnDevid.Size = new System.Drawing.Size(90, 51);
-            this.btnDevid.TabIndex = 13;
-            this.btnDevid.Tag = "÷";
-            this.btnDevid.Text = "÷";
-            this.btnDevid.UseVisualStyleBackColor = false;
-            this.btnDevid.Click += new System.EventHandler(this.Click_Button);
+            this.btnDivide.BackColor = System.Drawing.Color.Plum;
+            this.btnDivide.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDivide.Location = new System.Drawing.Point(233, 247);
+            this.btnDivide.Name = "btnDivide";
+            this.btnDivide.Size = new System.Drawing.Size(90, 51);
+            this.btnDivide.TabIndex = 13;
+            this.btnDivide.Tag = "÷";
+            this.btnDivide.Text = "÷";
+            this.btnDivide.UseVisualStyleBackColor = false;
+            this.btnDivide.Click += new System.EventHandler(this.Click_Button);
             // 
             // btnMultiply
             // 
@@ -341,18 +383,6 @@
             this.btnNumber1.UseVisualStyleBackColor = false;
             this.btnNumber1.Click += new System.EventHandler(this.Click_Button);
             // 
-            // btnSolveEquation
-            // 
-            this.btnSolveEquation.BackColor = System.Drawing.Color.IndianRed;
-            this.btnSolveEquation.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSolveEquation.Location = new System.Drawing.Point(16, 190);
-            this.btnSolveEquation.Name = "btnSolveEquation";
-            this.btnSolveEquation.Size = new System.Drawing.Size(307, 51);
-            this.btnSolveEquation.TabIndex = 20;
-            this.btnSolveEquation.Text = "SOLVE QUADRATIC EQUATION";
-            this.btnSolveEquation.UseVisualStyleBackColor = false;
-            this.btnSolveEquation.Click += new System.EventHandler(this.btnSolveEquation_Click);
-            // 
             // Form1
             // 
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
@@ -377,7 +407,7 @@
         private System.Windows.Forms.Button btnNumber2;
         private System.Windows.Forms.Button btnNumber1;
         private System.Windows.Forms.Button btnNumber0;
-        private System.Windows.Forms.Button btnDevid;
+        private System.Windows.Forms.Button btnDivide;
         private System.Windows.Forms.Button btnMultiply;
         private System.Windows.Forms.Button btnSubtract;
         private System.Windows.Forms.Button btnAddition;
@@ -388,6 +418,8 @@
         private System.Windows.Forms.Button btnDecimalPoint;
         private System.Windows.Forms.RichTextBox Screen;
         private System.Windows.Forms.Button btnSolveEquation;
+        private System.Windows.Forms.Button btnPasteClipboard;
+        private System.Windows.Forms.Button btnCopyScreen;
     }
 }
 
