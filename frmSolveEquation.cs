@@ -46,18 +46,18 @@ namespace SimpleCalculator
         private double GetLeadingCoeffcient()
         {
 
-            return form.CalculateFinalResult(LeadingCoefficient.Text.Substring(4, LeadingCoefficient.Text.Length - 4));
+            return form.CalculateExpressionResult(LeadingCoefficient.Text.Substring(4, LeadingCoefficient.Text.Length - 4));
         }
         private double GetLinearCoeffcient()
         {
 
-            return form.CalculateFinalResult(LinearCoeffcient.Text.Substring(4, LinearCoeffcient.Text.Length - 4));
+            return form.CalculateExpressionResult(LinearCoeffcient.Text.Substring(4, LinearCoeffcient.Text.Length - 4));
            
         }
         private double GetConstantTerm()
         {
 
-            return form.CalculateFinalResult(ConstantTerm.Text.Substring(4, ConstantTerm.Text.Length - 4));
+            return form.CalculateExpressionResult(ConstantTerm.Text.Substring(4, ConstantTerm.Text.Length - 4));
            
         }
         private NumberOfSolution GetSolution(double Delta)

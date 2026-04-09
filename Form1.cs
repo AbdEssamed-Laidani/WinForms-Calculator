@@ -17,7 +17,7 @@ namespace SimpleCalculator
         {
             InitializeComponent();
         }
-        private void ChangeNumber(Button button)
+        private void AppendButtonTextToScreen(Button button)
         {
             char[] Operation = { '+', '-', '×', '÷' };
 
@@ -37,7 +37,7 @@ namespace SimpleCalculator
                     Screen.Text += button.Text.ToString();
             }
         }
-        private void UpdateOperation(ref double result,ref List<string> list,ref int index,char operation)
+        private void ApplyOperationAtIndex(ref double result,ref List<string> list,ref int index,char operation)
         {
             switch(operation)
             {
@@ -57,7 +57,7 @@ namespace SimpleCalculator
             list.RemoveRange(index - 1, 2);
             index -= 2;
         }
-        private double CalculateByOrder(string Item)
+        private double CalculateMultiplicativeResult(string Item)
         {
             double result = default;
             string pattern = @"([\×\÷\%])";
@@ -71,18 +71,15 @@ namespace SimpleCalculator
                 {
                     case "×":
                         if (i + 1 < ItemSplited.Count)
-                            UpdateOperation(ref result, ref ItemSplited, ref i,'*');
-
+                            ApplyOperationAtIndex(ref result, ref ItemSplited, ref i,'*');
                         break;
                     case "÷":
                         if (i + 1 < ItemSplited.Count)
-                            UpdateOperation(ref result, ref ItemSplited, ref i, '/');
-
+                            ApplyOperationAtIndex(ref result, ref ItemSplited, ref i, '/');
                         break;
                     case "%":
                         if (i + 1 < ItemSplited.Count)
-                            UpdateOperation(ref result, ref ItemSplited, ref i, '%');
-
+                            ApplyOperationAtIndex(ref result, ref ItemSplited, ref i, '%');
                         break;
                     default:
                         break;
@@ -92,7 +89,7 @@ namespace SimpleCalculator
 
             return result;
         }
-        public double CalculateFinalResult(in string ScreenText)
+        public double CalculateExpressionResult(in string ScreenText)
         {
             string Pattern = @"(?=[+\-])";
             double result = 0;
@@ -103,7 +100,7 @@ namespace SimpleCalculator
             {
                 if (ScreenAfterSplit[i].Contains("×") || ScreenAfterSplit[i].Contains("÷") || ScreenAfterSplit[i].Contains("mod"))
                 {
-                    ScreenAfterSplit[i] = CalculateByOrder(ScreenAfterSplit[i]).ToString();
+                    ScreenAfterSplit[i] = CalculateMultiplicativeResult(ScreenAfterSplit[i]).ToString();
                 }
             }
             for (int i = 0; i < ScreenAfterSplit.Count; i++)
@@ -113,7 +110,7 @@ namespace SimpleCalculator
 
             return result;
         }
-        private void PerformOperation(Button button)
+        private bool IsOperatorAppendAllowed(Button button)
         {
             char[] Operation = { '+', '-', '×', '÷' };
             if (Screen.TextLength >= 1)
@@ -123,51 +120,37 @@ namespace SimpleCalculator
                     if (Screen.Text[Screen.Text.Length - 1] == item
                         || Screen.Text[Screen.Text.Length - 1].ToString() == "d")
                     {
-                        return;
+                        return false;
                     }
                 }
-                ChangeNumber(button);
+                return true;
+            }
+            return false;
+        }
+        private void AppendOperatorToScreen(Button button)
+        {
+            if (IsOperatorAppendAllowed(button))
+            {
+                AppendButtonTextToScreen(button);
+                btnDecimalPoint.Tag = "1";
             }
         }
-        private void ChangeScreen(Button button)
+        private void HandleScreenButtonInput(Button button)
         {
             switch (button.Name.ToString())
             {
-                case "btnAddition":
-                    PerformOperation(btnAddition);
-                    btnDecimalPoint.Tag = "1";
-                    break;
-                case "btnSubtract":
-                    PerformOperation(btnSubtract);
-                    btnDecimalPoint.Tag = "1";
-                    break;
-                case "btnMultiply":
-                    PerformOperation(btnMultiply);
-                    btnDecimalPoint.Tag = "1";
-                    break;
-                case "btnDivide":
-                    PerformOperation(btnDivide);
-                    btnDecimalPoint.Tag = "1";
-                    break;
-                case "btnMODoperator":
-                    PerformOperation(btnMODoperator);
-                    btnDecimalPoint.Tag = "1";
-                    break;
                 case "btnDecimalPoint":
                     if (btnDecimalPoint.Tag.ToString() == "1")
-                    {
-                        PerformOperation(btnDecimalPoint);
-                        btnDecimalPoint.Tag = "0";
-                    }
+                        AppendOperatorToScreen(button);
                     break;
                 default:
-                    ChangeNumber(button);
+                    AppendButtonTextToScreen(button);
                     break;
             }
         }
         private void btnNumber1_Click(object sender, EventArgs e)
         {
-            ChangeScreen(sender as Button);
+            HandleScreenButtonInput(sender as Button);
         }
         private void btnClearScreen_Click(object sender, EventArgs e)
         {
@@ -191,7 +174,7 @@ namespace SimpleCalculator
             
             try
             {
-                Screen.Text = CalculateFinalResult(Screen.Text).ToString();
+                Screen.Text = CalculateExpressionResult(Screen.Text).ToString();
             }
             catch (Exception ex)
             {
@@ -200,7 +183,7 @@ namespace SimpleCalculator
         }
         private void Click_Button(object sender, EventArgs e)
         {
-            ChangeScreen(sender as Button);
+            HandleScreenButtonInput(sender as Button);
         }
 
         private frmSolveEquation _equationForm;
