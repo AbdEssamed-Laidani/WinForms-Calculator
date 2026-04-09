@@ -26,29 +26,29 @@ namespace SimpleCalculator
             OneSol = 1,
             TwoSol = 2,
         }
-        Form1 form;
+        private Form1 form;
         public frmSolveEquation(Form1 form1)
         {
             InitializeComponent();
             form = form1;
         }
-        private double GetDelta()
+        private double GetDiscriminant()
         {
            
-                A = GetLeadingCoeffcient();
-                B = GetLinearCoeffcient();
+                A = GetLeadingCoefficient();
+                B = GetLinearCoefficient();
                 C = GetConstantTerm();
             
             
             return B * B - 4 * A * C;
         }
         
-        private double GetLeadingCoeffcient()
+        private double GetLeadingCoefficient()
         {
 
             return form.CalculateExpressionResult(LeadingCoefficient.Text.Substring(4, LeadingCoefficient.Text.Length - 4));
         }
-        private double GetLinearCoeffcient()
+        private double GetLinearCoefficient()
         {
 
             return form.CalculateExpressionResult(LinearCoeffcient.Text.Substring(4, LinearCoeffcient.Text.Length - 4));
@@ -60,7 +60,7 @@ namespace SimpleCalculator
             return form.CalculateExpressionResult(ConstantTerm.Text.Substring(4, ConstantTerm.Text.Length - 4));
            
         }
-        private NumberOfSolution GetSolution(double Delta)
+        private NumberOfSolution GetSolutionCount(double Delta)
         {
             if (Delta > 0)
             {
@@ -83,47 +83,45 @@ namespace SimpleCalculator
         {
             return X2;
         }
-        
-        private void UpdateCoeffcient(in string ButtonText)
+
+        private void UpdateCoefficient(in string ButtonText, bool CheckDecimalPoint = false)
         {
             RadioButton button = groupBox1.Controls.OfType<RadioButton>().Where(x => x.Checked).FirstOrDefault();
-            
+
             if (button != null)
             {
                 if (button == rbA)
                 {
+                    if (CheckDecimalPoint && LeadingCoefficient.Text.Contains('.'))
+                        return;
                     LeadingCoefficient.Text += ButtonText;
                 }
                 else if (button == rbB)
                 {
+                    if (CheckDecimalPoint && LinearCoeffcient.Text.Contains('.'))
+                        return;
                     LinearCoeffcient.Text += ButtonText;
                 }
                 else
                 {
+                    if (CheckDecimalPoint && ConstantTerm.Text.Contains('.'))
+                        return;
                     ConstantTerm.Text += ButtonText;
                 }
             }
-            
+
         }
         private void Click_Button(object sender, EventArgs e)
         {
             if (((Button)sender) == btnDecimalPoint)
-            {
-                if (btnDecimalPoint.Tag.ToString() == "1")
-                {
-                    btnDecimalPoint.Tag = "0";
-                    UpdateCoeffcient(((Button)sender).Text);
-                }
-                else
-                    return;
-            }
+                UpdateCoefficient(((Button)sender).Text, CheckDecimalPoint: true);
             else
-                UpdateCoeffcient(((Button)sender).Text);
+                UpdateCoefficient(((Button)sender).Text);
         }
-        private string ClearScreen(string Target)
+        private string ClearCoefficientValue(string Target)
         {
             while (Target.Length > 4)
-                Target = DecreaseText(Target);
+                Target = DeleteLastCharacter(Target);
             return Target;
         }
         private void btnClearScreen_Click(object sender, EventArgs e)
@@ -132,14 +130,14 @@ namespace SimpleCalculator
             if (button != null)
             {
                 if (button == rbA)
-                    LeadingCoefficient.Text = ClearScreen(LeadingCoefficient.Text);
+                    LeadingCoefficient.Text = ClearCoefficientValue(LeadingCoefficient.Text);
                 else if (button == rbB)
-                    LinearCoeffcient.Text = ClearScreen(LinearCoeffcient.Text);
+                    LinearCoeffcient.Text = ClearCoefficientValue(LinearCoeffcient.Text);
                 else
-                    ConstantTerm.Text = ClearScreen(ConstantTerm.Text);
+                    ConstantTerm.Text = ClearCoefficientValue(ConstantTerm.Text);
             }
         }
-        private string DecreaseText(string Target)
+        private string DeleteLastCharacter(string Target)
         {
             //we need to ensure that the target length is over 4 characters to keep the format "a = "...
             if (Target.Length > 4)
@@ -155,11 +153,11 @@ namespace SimpleCalculator
             if (button != null)
             {
                 if (button == rbA)
-                    LeadingCoefficient.Text = DecreaseText(LeadingCoefficient.Text);
+                    LeadingCoefficient.Text = DeleteLastCharacter(LeadingCoefficient.Text);
                 else if (button == rbB)
-                    LinearCoeffcient.Text = DecreaseText(LinearCoeffcient.Text);
+                    LinearCoeffcient.Text = DeleteLastCharacter(LinearCoeffcient.Text);
                 else
-                    ConstantTerm.Text = DecreaseText(ConstantTerm.Text);
+                    ConstantTerm.Text = DeleteLastCharacter(ConstantTerm.Text);
             }
         }
 
@@ -168,15 +166,19 @@ namespace SimpleCalculator
 
             try
             {
-                Delta = GetDelta();
+                Delta = GetDiscriminant();
             }
             catch(Exception ex)
             {
                 SolutionScreen.Text = ex.Message;
                 return;
             }
-
-            switch (GetSolution(Delta))
+            if (A == 0)
+            {
+                SolutionScreen.Text = "Not a Quadratic Equation";
+                return;
+            }
+            switch (GetSolutionCount(Delta))
             {
                 case NumberOfSolution.TwoSol:
                     SolutionScreen.Text = "X1 = " + GetFirstSolution() +
@@ -223,16 +225,16 @@ namespace SimpleCalculator
             var rbutton = groupBox1.Controls.OfType<RadioButton>().Where(r => r.Checked).FirstOrDefault();
 
             if (rbutton == rbA)
-                Clipboard.SetText(GetLeadingCoeffcient().ToString());
+                Clipboard.SetText(GetLeadingCoefficient().ToString());
             else if (rbutton == rbB)
-                Clipboard.SetText(GetLinearCoeffcient().ToString());
+                Clipboard.SetText(GetLinearCoefficient().ToString());
             else
                 Clipboard.SetText(GetConstantTerm().ToString());
         }
 
         private void btnPasteClipboard_Click(object sender, EventArgs e)
         {
-            UpdateCoeffcient(Clipboard.GetText());
+            UpdateCoefficient(Clipboard.GetText());
         }
     }
 }
