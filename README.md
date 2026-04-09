@@ -47,7 +47,7 @@ x = (-b ± √Δ) / 2a
 ```
 
 ### Division by Zero
-Detected at calculation time inside `UpdateOperation`:
+Detected at calculation time inside `ApplyOperationAtIndex`:
 ```csharp
 if (list[index + 1] == "0")
     throw new DivideByZeroException();
@@ -93,5 +93,5 @@ https://github.com/AbdEssamed-Laidani/WinForms-Calculator.git
 ---
 
 ## 👤 Author
-
+**Developed [@AbdEssamed-Laidani](https://github.com/AbdEssamed-Laidani)**
 Built as part of my C# and WinForms learning journey.
