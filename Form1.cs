@@ -130,18 +130,29 @@ namespace SimpleCalculator
         private void AppendOperatorToScreen(Button button)
         {
             if (IsOperatorAppendAllowed(button))
-            {
                 AppendButtonTextToScreen(button);
-                btnDecimalPoint.Tag = "1";
-            }
         }
         private void HandleScreenButtonInput(Button button)
         {
             switch (button.Name.ToString())
             {
+                case "btnAddition":
+                case "btnSubtract":
+                case "btnMultiply":
+                case "btnDivide":
+                case "btnMODoperator":
+                    AppendOperatorToScreen(button);
+                    btnDecimalPoint.Tag = "1";
+                    break;
                 case "btnDecimalPoint":
-                    if (btnDecimalPoint.Tag.ToString() == "1")
-                        AppendOperatorToScreen(button);
+                    if (btnDecimalPoint.Tag.ToString() == "1" && Screen.TextLength >= 1)
+                    {
+                        if (char.IsDigit(Screen.Text[Screen.TextLength - 1]))
+                        {
+                            AppendOperatorToScreen(button);
+                            btnDecimalPoint.Tag = "0";
+                        }
+                    }
                     break;
                 default:
                     AppendButtonTextToScreen(button);
@@ -166,8 +177,11 @@ namespace SimpleCalculator
                     btnClearScreen_Click(sender, e);
                     return;
                 }
+                if (Screen.Text[Screen.Text.Length - 1] == '.')
+                    btnDecimalPoint.Tag = "1";
                 Screen.Text = Screen.Text.Remove(Screen.Text.Length - 1);
             }
+
         }
         private void btnEqual_Click(object sender, EventArgs e)
         {
